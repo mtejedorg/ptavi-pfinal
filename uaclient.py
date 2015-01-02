@@ -67,7 +67,7 @@ class ConfigXMLHandler(ContentHandler):
         return self.config
 
 
-USAGE = "Usage: python uaclient.py config metodo opcion"
+USAGE = "Usage: python uaclient.py config method option"
 
 # Cliente UDP simple.
 
@@ -80,8 +80,9 @@ if len(coms) != 4:
     sys.exit()
 
 # Inicializamos el programa e interpretamos los comandos
-METODO = coms[2].capitalize()  # No importa cómo nos introduzcan el método
 CONFIG = coms[1]
+METHOD = coms[2].capitalize()  # No importa cómo nos introduzcan el método
+OPTION = coms[3]
 
 # Interpretamos el archivo de configuración mediante la clase instanciada"
 parser = make_parser()
@@ -90,39 +91,62 @@ parser.setContentHandler(sHandler)
 parser.parse(open(CONFIG))
 config = sHandler.get_config()
 
-SERVER_IP = config["uaserver"]["ip"]
-SERVER_PORT = config["uaserver"]["puerto"]
+NAME = config["account"]["username"]
+PASS = config["account"]["passwd"]
 
-RTP_PORT = config["rtpaudio"]["puerto"]
+if config["uaserver"]["ip"] != "":
+    SERVER_IP = config["uaserver"]["ip"]
+else
+    SERVER_IP = "127.0.0.1"
+SERVER_PORT = int(config["uaserver"]["puerto"])
+
+RTP_PORT = int(config["rtpaudio"]["puerto"])
 
 PR_IP = config["regproxy"]["ip"]
-PR_PORT = config["regproxy"]["puerto"]
+PR_PORT = int(config["regproxy"]["puerto"])
 
-LOG = config["log"]["path"]
+LOGPATH = config["log"]["path"]
 
 AUDIO = config["audio"]["path"]
-
-sys.exit()
 
 def get_fecha():
     fecha = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(time.time()))
     return fecha
 
-def mensaje(metodo):
+def log(msg):
+    fich = open(LOGPATH, "W")
+    msg = get_fecha + " " + msg
+    fich.write(msg)
+    fich.close
+
+def mensaje(metodo, add):
     """ Devuelve un string con la forma del mensaje a enviar """
-    msg = metodo + " sip:" + NOMBRE + "@" + SERVER + " SIP/2.0\r\n"
+    msg = metodo + " sip:" + add + " SIP/2.0\r\n"
     return msg
 
 
 def send(metodo):
     """ Envía al servidor un mensaje usando el método como parámetro """
-    msg = mensaje(metodo)
-    if metodo != "BYE" and metodo != "INVITE" and metodo != "ACK":
-        #Detectamos el error, aunque enviamos igualmente
-        print "------WARNING: Método no contemplado"
-        print "------    Métodos contemplados: INVITE, BYE, ACK"
+    if metodo = "Register":
+        add = NAME + ":" + SERVER_PORT
+        msg = mensaje(metodo, add)
+        msg += "Expires: " + OPTION + "\r\n"
+    else
+        msg = mensaje(metodo, OPTION)    
+        if metodo == "Invite":
+            msg += "Content-Type: application/sdp\r\n\r\n"
+            msg += "v=o\r\n"                                  #v
+            msg += "o=" + NAME + " " + SERVER_IP + "\r\n"     #o
+            msg += "s=sesionchachi\r\n"                       #s
+            msg += "t=0\r\n"                                  #t
+            msg += "m=audio" + RTP_PORT + "RTP\r\n"           #m
+
     print "Enviando: " + msg
     my_socket.send(msg + '\r\n')
+
+    # Registramos en el log:
+    logmsg = "Sent to " + PR_IP + ":" + PR_PORT + ":" + msg
+    log(logmsg)
 
 
 def rcv():
@@ -131,7 +155,9 @@ def rcv():
     print 'Recibido -- ', data
     return data
 
+
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
+log("Starting...\r\n")
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
@@ -152,7 +178,7 @@ try:
     data = rcv()
 except socket.error:  # Cuando el servidor no existe
     print "Error: No server listening at",
-    print SERVER + " port " + PORT
+    print SERVER_IP + " port " + SERVER_PORT
     sys.exit()
 
 code = data.split()[1]
