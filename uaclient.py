@@ -6,8 +6,68 @@ Programa cliente que abre un socket a un servidor
 
 import socket
 import sys
+from xml.sax import make_parser
+from xml.sax.handler import ContentHandler
 
-USAGE = "Usage: python client.py method receiver@IP:SIPport"
+
+class ConfigXMLHandler(ContentHandler):
+
+    def __init__(self):
+
+        self.config = {}
+
+    def startElement(self, name, attrs):
+
+        if name == 'account':
+            # De esta manera tomamos los valores de los atributos
+            account = {}
+            account['username'] = attrs.get('username', "")
+            account['passwd'] = attrs.get('passwd', "")
+
+            self.config["account"] = account
+
+        elif name == 'uaserver':
+
+            uaserver = {}
+            uaserver['ip'] = attrs.get('ip', "")
+            uaserver['puerto'] = attrs.get('puerto', "")
+
+            self.config["uaserver"] = uaserver
+
+        elif name == 'rtpaudio':
+
+            rtpaudio = {}
+            rtpaudio['puerto'] = attrs.get('puerto', "")
+
+            self.config["rtpaudio"] = rtpaudio
+
+        elif name == 'regproxy':
+
+            regproxy = {}
+            regproxy['ip'] = attrs.get('ip', "")
+            regproxy['puerto'] = attrs.get('puerto', "")
+
+            self.config["regproxy"] = regproxy
+
+        elif name == 'log':
+
+            log = {}
+            log['path'] = attrs.get('path', "")
+
+            self.config["log"] = log
+
+        elif name == 'audio':
+
+            audio = {}
+            audio['path'] = attrs.get('path', "")
+
+            self.config["audio"] = audio
+
+    def get_config(self):
+        return self.config
+
+
+USAGE = "Usage: python uaclient.py config metodo opcion"
 
 # Cliente UDP simple.
 
@@ -15,19 +75,38 @@ coms = sys.argv
 
 # Comprobamos el número de argumentos
 
-if len(coms) != 3:
+if len(coms) != 4:
     print USAGE
     sys.exit()
 
 # Inicializamos el programa e interpretamos los comandos
-METODO = coms[1].upper()  # Nos pueden pasar el parámetro en minúsculas
-servidor = coms[2]
-datos = servidor.split("@")
-NOMBRE = datos[0]
-direccion = datos[1].split(":")
-SERVER = direccion[0]
-PORT = direccion[1]
+METODO = coms[2].capitalize()  # No importa cómo nos introduzcan el método
+CONFIG = coms[1]
 
+# Interpretamos el archivo de configuración mediante la clase instanciada"
+parser = make_parser()
+sHandler = ConfigXMLHandler()
+parser.setContentHandler(sHandler)
+parser.parse(open(CONFIG))
+config = sHandler.get_config()
+
+SERVER_IP = config["uaserver"]["ip"]
+SERVER_PORT = config["uaserver"]["puerto"]
+
+RTP_PORT = config["rtpaudio"]["puerto"]
+
+PR_IP = config["regproxy"]["ip"]
+PR_PORT = config["regproxy"]["puerto"]
+
+LOG = config["log"]["path"]
+
+AUDIO = config["audio"]["path"]
+
+sys.exit()
+
+def get_fecha():
+    fecha = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(time.time()))
+    return fecha
 
 def mensaje(metodo):
     """ Devuelve un string con la forma del mensaje a enviar """
@@ -59,7 +138,7 @@ my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 try:
     my_socket.connect((SERVER, int(PORT)))
 except socket.gaierror:  # Cuando la IP es inválida
-    print "Error: invalid IP"
+    print "Error: No server listening at" + IP + "port" +  PORT
     print USAGE
     sys.exit()
 except ValueError:  # Cuando el puerto no es un número
