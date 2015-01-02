@@ -18,19 +18,13 @@
 <!ATTLIST audio path CDATA #REQUIRED>
 ]>
 <config>
-<account>
-    <username>Pedro</username>
-    <!---passwd>.....</passwd-->
-</account>
-<uaserver>
-    <ip>192.168.1.2</ip>
-    <puerto>1234</puerto>
-</uaserver>
-<rtpaudio> <puerto>23000</puerto> </rtpaudio>
-<regproxy>
-    <ip>192.168.1.3</ip>
-    <puerto>1234</puerto>
-</regproxy>
-<log><path>log2.txt</path></log>
-<audio><path>cancion.mp3</path></audio>
+    <account username= "Pepito">
+    <!---account passwd= "pass"-->
+    </account>
+    <!---uaserver ip= "pass"-->
+    <uaserver puerto= "1234" />
+    <rtpaudio puerto= "23000" />
+    <regproxy ip= "192.168.1.3" puerto= "1234" />
+    <log path="log.txt" />
+    <audio path= "cancion.mp3" />
 </config>
