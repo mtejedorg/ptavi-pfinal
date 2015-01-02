@@ -19,18 +19,18 @@
 ]>
 <config>
 <account>
-    <username>.....</username>
-    <passwd>.....</passwd>
+    <username>Pedro</username>
+    <!---passwd>.....</passwd-->
 </account>
 <uaserver>
-    <ip>.....</ip>
-    <puerto>.....</puerto>
+    <ip>192.168.1.1</ip>
+    <puerto>1234</puerto>
 </uaserver>
-<rtpaudio> <puerto>.....</puerto> </rtpaudio>
+<rtpaudio> <puerto>23000</puerto> </rtpaudio>
 <regproxy>
-    <ip>.....</ip>
-    <puerto>.....</puerto>
+    <ip>192.168.1.3</ip>
+    <puerto>1234</puerto>
 </regproxy>
-<log><path>.....</path></log>
-<audio><path>.....</path></audio>
+<log><path>log.txt</path></log>
+<audio><path>cancion.mp3</path></audio>
 </config>
