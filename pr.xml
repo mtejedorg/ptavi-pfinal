@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE config [
+<!ELEMENT config (account, uaserver, rtpaudio, regproxy, log, audio)>
+<!ELEMENT account EMPTY>
+<!ATTLIST account username CDATA #REQUIRED>
+<!ATTLIST account passwd CDATA #IMPLIED>
+<!ELEMENT uaserver EMPTY>
+<!ATTLIST uaserver ip CDATA #IMPLIED>
+<!ATTLIST uaserver puerto CDATA #REQUIRED>
+<!ELEMENT rtpaudio EMPTY>
+<!ATTLIST rtpaudio puerto CDATA #REQUIRED>
+<!ELEMENT regproxy EMPTY>
+<!ATTLIST regproxy ip CDATA #REQUIRED>
+<!ATTLIST regproxy puerto CDATA #REQUIRED>
+<!ELEMENT log EMPTY>
+<!ATTLIST log path CDATA #REQUIRED>
+<!ELEMENT audio EMPTY>
+<!ATTLIST audio path CDATA #REQUIRED>
+]>
+<config>
+<account>
+    <username>.....</username>
+    <passwd>.....</passwd>
+</account>
+<uaserver>
+    <ip>.....</ip>
+    <puerto>.....</puerto>
+</uaserver>
+<rtpaudio> <puerto>.....</puerto> </rtpaudio>
+<regproxy>
+    <ip>.....</ip>
+    <puerto>.....</puerto>
+</regproxy>
+<log><path>.....</path></log>
+<audio><path>.....</path></audio>
+</config>
