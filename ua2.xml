@@ -18,10 +18,19 @@
 <!ATTLIST audio path CDATA #REQUIRED>
 ]>
 <config>
-<account> ..... </account>
-<uaserver> ..... </uaserver>
-<rtpaudio> ..... </rtpaudio>
-<regproxy> ..... </regproxy>
-<log> ..... </log>
-<audio> ..... </audio>
+<account>
+    <username>.....</username>
+    <passwd>.....</passwd>
+</account>
+<uaserver>
+    <ip>.....</ip>
+    <puerto>.....</puerto>
+</uaserver>
+<rtpaudio> <puerto>.....</puerto> </rtpaudio>
+<regproxy>
+    <ip>.....</ip>
+    <puerto>.....</puerto>
+</regproxy>
+<log><path>.....</path></log>
+<audio><path>.....</path></audio>
 </config>
