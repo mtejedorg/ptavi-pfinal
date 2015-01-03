@@ -6,6 +6,7 @@ Programa cliente que abre un socket a un servidor
 
 import socket
 import sys
+import time
 from xml.sax import make_parser
 from xml.sax.handler import ContentHandler
 
@@ -96,7 +97,7 @@ PASS = config["account"]["passwd"]
 
 if config["uaserver"]["ip"] != "":
     SERVER_IP = config["uaserver"]["ip"]
-else
+else:
     SERVER_IP = "127.0.0.1"
 SERVER_PORT = int(config["uaserver"]["puerto"])
 
@@ -110,14 +111,13 @@ LOGPATH = config["log"]["path"]
 AUDIO = config["audio"]["path"]
 
 def get_fecha():
-    fecha = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(time.time()))
+    fecha = time.strftime('%Y%m%d%H%M%S', time.gmtime(time.time()))
     return fecha
 
 def log(msg):
-    fich = open(LOGPATH, "W")
-    msg = get_fecha + " " + msg
+    msg = " ".join(msg.split("\r\n")) #Sustituimos los saltos de linea
+    msg = get_fecha() + " " + msg + "\r\n"
     fich.write(msg)
-    fich.close
 
 def mensaje(metodo, add):
     """ Devuelve un string con la forma del mensaje a enviar """
@@ -127,11 +127,11 @@ def mensaje(metodo, add):
 
 def send(metodo):
     """ Envía al servidor un mensaje usando el método como parámetro """
-    if metodo = "Register":
+    if metodo == "Register":
         add = NAME + ":" + SERVER_PORT
         msg = mensaje(metodo, add)
         msg += "Expires: " + OPTION + "\r\n"
-    else
+    else:
         msg = mensaje(metodo, OPTION)    
         if metodo == "Invite":
             msg += "Content-Type: application/sdp\r\n\r\n"
@@ -139,46 +139,68 @@ def send(metodo):
             msg += "o=" + NAME + " " + SERVER_IP + "\r\n"     #o
             msg += "s=sesionchachi\r\n"                       #s
             msg += "t=0\r\n"                                  #t
-            msg += "m=audio" + RTP_PORT + "RTP\r\n"           #m
+            msg += "m=audio " + str(RTP_PORT) + " RTP\r\n"    #m
 
     print "Enviando: " + msg
     my_socket.send(msg + '\r\n')
 
     # Registramos en el log:
-    logmsg = "Sent to " + PR_IP + ":" + PR_PORT + ":" + msg
+    logmsg = "Sent to " + PR_IP + ":" + str(PR_PORT) + ": " + msg
     log(logmsg)
 
 
 def rcv():
-    """ Recibe la respuesta y devuelve el código del protocolo """
+    """ Recibe la respuesta """
     data = my_socket.recv(1024)
     print 'Recibido -- ', data
     return data
 
+def end():
+    # Cerramos todo
+    log("Finishing")
+    my_socket.close()
+    fich.close
+    print "Byee!!!"
+
 
 # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
+fich = open(LOGPATH, "w") # Abrimos el archivo de log
 log("Starting...\r\n")
 my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
+# Nos conectamos al sevidor (proxy) y le enviamos el mensaje
 try:
-    my_socket.connect((SERVER, int(PORT)))
+    my_socket.connect((PR_IP, PR_PORT))
 except socket.gaierror:  # Cuando la IP es inválida
-    print "Error: No server listening at" + IP + "port" +  PORT
+    error = "Error: No server listening at" + PR_IP + " port " +  str(PR_PORT)
+    log(error)
+    print error
     print USAGE
+    end()
     sys.exit()
 except ValueError:  # Cuando el puerto no es un número
-    print "Error: invalid port"
+    error = "Error: invalid port"
+    log(error)
+    print error
     print USAGE
+    end()
     sys.exit()
 
-send(METODO)  # Enviamos el metodo con el que nos llaman
+send(METHOD)  # Enviamos según el metodo con el que nos llaman
 
+
+# Esperamos la respuesta del servidor
 try:
     data = rcv()
 except socket.error:  # Cuando el servidor no existe
-    print "Error: No server listening at",
-    print SERVER_IP + " port " + SERVER_PORT
+    error = "Error: No server listening at " + PR_IP + " port " + str(PR_PORT)
+    log(error)
+    print error
+    end()
+    sys.exit()
+except KeyboardInterrupt:
+    end()
     sys.exit()
 
 code = data.split()[1]
@@ -195,18 +217,15 @@ if code == "100":
         print "Error: Trying no recibido"
 
 elif code == "400":          # Bad Request
-    print "El servidor no entiende el método " + METODO
+    print "El servidor no entiende el método " + METHOD
 elif code == "405":          # Method Not Allowed
     print "Error en el servidor: Método no contemplado"
 elif code == "200":          # Sucederá cuando enviemos un BYE
-    if METODO == "BYE":
+    if METHOD == "BYE":
         print "Conexión finalizada con éxito"
 else:
     print "MEGABRUTALFATAL ERROR: Respuesta no contemplada"
 
-
 print "Terminando socket..."
 
-# Cerramos todo
-my_socket.close()
-print "Fin."
+end()
