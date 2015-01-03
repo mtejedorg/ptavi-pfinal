@@ -22,9 +22,9 @@
     <!---account passwd= "pass"-->
     </account>
     <!---uaserver ip= "pass"-->
-    <uaserver puerto= "1234" />
-    <rtpaudio puerto= "23000" />
-    <regproxy ip= "192.168.1.3" puerto= "1234" />
-    <log path="log.txt" />
+    <uaserver puerto= "2345" />
+    <rtpaudio puerto= "24000" />
+    <regproxy ip= "127.0.0.1" puerto= "4567" />
+    <log path="log2.txt" />
     <audio path= "cancion.mp3" />
 </config>
