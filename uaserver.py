@@ -7,7 +7,13 @@ Clase (y programa principal) para un servidor de eco en UDP simple
 import SocketServer
 import sys
 import os
-
+import time
+import uaclient
+#from uaclient import ConfigXMLHandler
+#from uaclient import log
+#from uaclient import get_fecha
+from xml.sax import make_parser
+from xml.sax.handler import ContentHandler
 
 class SIPHandler(SocketServer.DatagramRequestHandler):
     """
@@ -49,13 +55,13 @@ class SIPHandler(SocketServer.DatagramRequestHandler):
         print "El cliente nos manda ==> " + line
         metodo = line.split()[0]
         prot = line.split()[2]
-        if metodo == "INVITE":
+        if metodo == "Invite":
             self.send("100")  # Send interpreta el Trying y añade Ringing y OK
-        elif metodo == "ACK":
+        elif metodo == "Ack":
             comando = "./mp32rtp -i 127.0.0.1 -p 23032 < " + FILE
             print "Enviando archivo...\r\n\r\n"
             os.system(comando)
-        elif metodo == "BYE":
+        elif metodo == "Bye":
             self.send("200")
         elif prot != "SIP/2.0":
             self.send("400")
@@ -64,15 +70,35 @@ class SIPHandler(SocketServer.DatagramRequestHandler):
 
 if __name__ == "__main__":
 
-    USAGE = "Usage: python server.py IP port audio_file"
+    USAGE = "Usage: python uaserver.py config"
 
     # Creamos servidor de eco y escuchamos
-    if len(sys.argv) == 4:
-        IP = sys.argv[1]
-        PORT = int(sys.argv[2])
-        FILE = sys.argv[3]
-        s = SocketServer.UDPServer((IP, PORT), SIPHandler)
-        print "Listening...\r\n"
-        s.serve_forever()
-    else:
+    if len(sys.argv) != 2:
         print USAGE
+        sys.exit()
+
+    CONFIGFILE = sys.argv[1]
+    xmlHandler = uaclient.ConfigXMLHandler()
+    parser = make_parser()
+    parser.setContentHandler(xmlHandler)
+    parser.parse(open(CONFIGFILE))
+    config = xmlHandler.get_config()
+
+    if config["uaserver"]["ip"] != "":
+        IP = config["uaserver"]["ip"]
+    else:
+        IP = "127.0.0.1"
+    PORT = int(config["uaserver"]["puerto"])
+
+    FILE = config["audio"]["path"]
+    LOGPATH = config["log"]["path"]
+    s = SocketServer.UDPServer((IP, PORT), SIPHandler)
+
+    fich = open(LOGPATH, "a") # Abrimos el archivo de log
+    uaclient.log("Starting...\r\n", fich)
+    print "Listening...\r\n"
+    try:
+        s.serve_forever()
+    except KeyboardInterrupt:
+        print "\r\nByeeee!!!!"
+        sys.exit()
