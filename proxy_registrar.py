@@ -8,6 +8,9 @@ en UDP simple
 import SocketServer
 import sys
 import time
+from uaclient import log
+from xml.sax import make_parser
+from xml.sax.handler import ContentHandler
 
 clients = {}
 
@@ -64,14 +67,13 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         luke@polismassa.com \t localhost \t 2013-10-23 10:37:12
         papa@darthwader.com \t localhost \t 2013-10-23 10:21:15
         """
-        fich = open("registered.txt", 'w')
+        fich = open(DATABASE, 'w')
         info = "User \t IP \t Expires\r\n"
         for client in clients:
             info += client + " \t "
             info += clients[client]["IP"] + " \t "
-            tiempo = time.gmtime(clients[client]["time"])
-            str_time = time.strftime('%Y-%m-%d %H:%M:%S', tiempo)
-            info += str_time + " \t "
+            tiempo = clients[client]["time"]
+            info += str(tiempo) + " \t "
             info += "\r\n"
         fich.write(info)
         fich.close()
@@ -91,7 +93,7 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         """
         lineas = line.split("\r\n")
         palabras = lineas[0].split(" ") + lineas[1].split(" ")
-        if palabras[0] == "REGISTER":
+        if palabras[0] == "Register":
             cliente = palabras[1][4:]
             #prot_ver es una lista que incluye portocolo y versión
             prot_ver = palabras[2].split("/")
@@ -176,7 +178,7 @@ if __name__ == "__main__":
     LOGPATH = config["log"]["path"]
 
     # Creamos servidor de register y escuchamos
-    s = SocketServer.UDPServer(("", int(sys.argv[1])), SIPRegisterHandler)
+    s = SocketServer.UDPServer((IP, PORT), SIPRegisterHandler)
     print "Lanzando servidor UDP de SIP Register...\r\n\r\n"
     try:
         s.serve_forever()
