@@ -1,36 +1,23 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE config [
-<!ELEMENT config (account, uaserver, rtpaudio, regproxy, log, audio)>
-<!ELEMENT account EMPTY>
-<!ATTLIST account username CDATA #REQUIRED>
-<!ATTLIST account passwd CDATA #IMPLIED>
-<!ELEMENT uaserver EMPTY>
-<!ATTLIST uaserver ip CDATA #IMPLIED>
-<!ATTLIST uaserver puerto CDATA #REQUIRED>
-<!ELEMENT rtpaudio EMPTY>
-<!ATTLIST rtpaudio puerto CDATA #REQUIRED>
-<!ELEMENT regproxy EMPTY>
-<!ATTLIST regproxy ip CDATA #REQUIRED>
-<!ATTLIST regproxy puerto CDATA #REQUIRED>
+<!ELEMENT config (server, database, log)>
+<!ELEMENT server EMPTY>
+<!ATTLIST server name CDATA #IMPLIED>
+<!ATTLIST server ip CDATA #IMPLIED>
+<!ATTLIST server puerto CDATA #REQUIRED>
+<!ELEMENT database EMPTY>
+<!ATTLIST database path CDATA #REQUIRED>
+<!ATTLIST database passwdpath CDATA #IMPLIED>
 <!ELEMENT log EMPTY>
 <!ATTLIST log path CDATA #REQUIRED>
-<!ELEMENT audio EMPTY>
-<!ATTLIST audio path CDATA #REQUIRED>
 ]>
 <config>
-<account>
-    <username>.....</username>
-    <passwd>.....</passwd>
-</account>
-<uaserver>
-    <ip>.....</ip>
-    <puerto>.....</puerto>
-</uaserver>
-<rtpaudio> <puerto>.....</puerto> </rtpaudio>
-<regproxy>
-    <ip>.....</ip>
-    <puerto>.....</puerto>
-</regproxy>
-<log><path>.....</path></log>
-<audio><path>.....</path></audio>
+    <!---server name= "ProxyRegistrar"-->
+    <!---server ip= "127.0.0.1"-->
+    <server puerto= "2345">
+    </server>
+    <database path= "registered.txt">
+    <!--database passwdpath= "passwd.txt"-->
+    </database>
+    <log path= "logpr.txt" />
 </config>
