@@ -108,6 +108,10 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
             print cliente + ": ",
             print valor
 
+            logmsg = "Registered client " + cliente
+            logmsg += valor['IP'] + ":" + str(self.client_address[1])
+            log(logmsg, fich)
+
             if expires == 0:
                 print "El tiempo de expiración es 0.",
                 del clients[cliente]
@@ -176,12 +180,15 @@ if __name__ == "__main__":
     DATABASE = config["database"]["path"]
     PASSWDDB = config["database"]["passwdpath"]
     LOGPATH = config["log"]["path"]
+    fich = open(LOGPATH, 'a')
 
     # Creamos servidor de register y escuchamos
+    log("Starting...", fich)
     s = SocketServer.UDPServer((IP, PORT), SIPRegisterHandler)
     print "Lanzando servidor UDP de SIP Register...\r\n\r\n"
     try:
         s.serve_forever()
     except KeyboardInterrupt:
         print "\r\nByeeee!!!!"
+        fich.close()
         sys.exit()
