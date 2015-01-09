@@ -6,6 +6,7 @@ Programa cliente que abre un socket a un servidor
 
 import socket
 import sys
+import os
 import time
 from xml.sax import make_parser
 from xml.sax.handler import ContentHandler
@@ -206,6 +207,7 @@ if __name__ == "__main__":
         sys.exit()
 
     code = data.split()[1]
+    rtpclient = {}
 
     if code == "100":
     # Trying, buscamos recibir Ring y Ok, en esta práctica en el mismo mensaje
@@ -213,6 +215,18 @@ if __name__ == "__main__":
         if data[1].split()[1] == "180":      # Trying
             if data[2].split()[1] == "200":  # OK
                 send("Ack")
+                #Enviamos el archivo por RTP
+                lines = data[3].split("\r\n")
+                for line in lines:
+                    if line.split("=")[0] == "o":
+                        rtpclient["IP"] = line.split(" ")[1]
+                    if line.split("=")[0] == "m":
+                        rtpclient["port"] = line.split(" ")[1]
+                comando = "./mp32rtp -i " + rtpclient["IP"] + " -p " + str(rtpclient["port"])
+                comando += " < " + AUDIO
+                print "Enviando archivo...\r\n\r\n"
+                os.system(comando)
+
             else:
                 print "Error: OK no recibido"
         else:
