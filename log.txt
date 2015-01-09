@@ -1,0 +1,104 @@
+20150104200815 Sent to 127.0.0.1:2345: Register sip:pedro@micasa.es:1111 SIP/2.0 Expires: 3600 
+20150104200815 Received from 127.0.0.1:2345: SIP/2.0 200 OK  
+20150104200819 Sent to 127.0.0.1:2345: Invite sip:juan@latuya.com SIP/2.0 Content-Type: application/sdp  v=o o=pedro@micasa.es 127.0.0.1 s=sesionchachi t=0 m=audio 23000 RTP 
+20150104200819 Received from 127.0.0.1:2345: SIP/2.0 100 Trying  SIP/2.0 180 Ringing  SIP/2.0 200 OK Content-Type: application/sdp  v=o o=juan@latuya.com 127.0.0.1 s=sesionchachi t=0 m=audio 2222 RTP  
+20150104200819 Sent to 127.0.0.1:2345: Ack sip:juan@latuya.com SIP/2.0 
+20150108172103 Sent to 127.0.0.1:2345: Register sip:pedro@micasa.es:1111 SIP/2.0 Expires: 3600 
+20150108172103 Received from 127.0.0.1:2345: 
+20150108173844 Sent to 127.0.0.1:2345: Register sip:pedro@micasa.es:1111 SIP/2.0 Expires: 3600 
+20150108173844 Received from 127.0.0.1:2345: 
+20150109181756 Sent to 127.0.0.1:2345: Register sip:pedro@micasa.es:1111 SIP/2.0 Expires: 3600 
+20150109181756 Received from 127.0.0.1:2345: 
+20150109182058 Sent to 127.0.0.1:2345: Register sip:pedro@micasa.es:1111 SIP/2.0 Expires: 3600 
+20150109182058 Received from 127.0.0.1:2345: SIP/2.0 400 Bad Request  
+20150109182929 Sent to 127.0.0.1:2345: Register sip:pedro@micasa.es:1111 SIP/2.0 Expires: 3600 
+20150109182929 Received from 127.0.0.1:2345: SIP/2.0 400 Bad Request  
+20150109182936 Sent to 127.0.0.1:2345: Register sip:pedro@micasa.es:1111 SIP/2.0 Expires: 3600 
+20150109182936 Received from 127.0.0.1:2345: SIP/2.0 400 Bad Request  
+20150109183450 Sent to 127.0.0.1:2345: Register sip:pedro@micasa.es:1111 SIP/2.0 Expires: 3600 
+20150109183450 Received from 127.0.0.1:2345: SIP/2.0 400 Bad Request  
+20150109183603 Sent to 127.0.0.1:2345: Register sip:pedro@micasa.es:1111 SIP/2.0 Expires: 3600 
+20150109183603 Received from 127.0.0.1:2345: SIP/2.0 400 Bad Request  
+20150109183700 Sent to 127.0.0.1:2345: Register sip:pedro@micasa.es:1111 SIP/2.0 Expires: 3600 
+20150109183700 Received from 127.0.0.1:2345: 
+20150109183910 Sent to 127.0.0.1:2345: Register sip:pedro@micasa.es:1111 SIP/2.0 Expires: 3600 
+20150109183910 Received from 127.0.0.1:2345: SIP/2.0 200 OK  
+20150109183941 Sent to 127.0.0.1:2345: Register sip:pedro@micasa.es:1111 SIP/2.0 Expires: 3600 
+20150109183941 Received from 127.0.0.1:2345: SIP/2.0 200 OK  
+20150109184204 Sent to 127.0.0.1:2345: Invite sip:juan@latuya.com SIP/2.0 Content-Type: application/sdp  v=o o=pedro@micasa.es 127.0.0.1 s=sesionchachi t=0 m=audio 23000 RTP 
+20150109184204 Received from 127.0.0.1:2345: SIP/2.0 100 Trying  SIP/2.0 180 Ringing  SIP/2.0 200 OK Content-Type: application/sdp  v=o o=juan@latuya.com 127.0.0.1 s=sesionchachi t=0 m=audio 2222 RTP  
+20150109184204 Sent to 127.0.0.1:2345: Ack sip:juan@latuya.com SIP/2.0 
+20150109191021 Sent to 127.0.0.1:2345: Register sip:pedro@micasa.es:1111 SIP/2.0 Expires: 3600 
+20150109191021 Received from 127.0.0.1:2345: SIP/2.0 200 OK  
+20150109191041 Sent to 127.0.0.1:2345: Invite sip:juan@latuya.com SIP/2.0 Content-Type: application/sdp  v=o o=pedro@micasa.es 127.0.0.1 s=sesionchachi t=0 m=audio 23000 RTP 
+20150109191041 Received from 127.0.0.1:2345: SIP/2.0 100 Trying  SIP/2.0 180 Ringing  SIP/2.0 200 OK Content-Type: application/sdp  v=o o=juan@latuya.com 127.0.0.1 s=sesionchachi t=0 m=audio 2222 RTP  
+20150109191041 Sent to 127.0.0.1:2345: Ack sip:juan@latuya.com SIP/2.0 
+20150109195431 Sent to 127.0.0.1:2345: Register sip:pedro@micasa.es:1111 SIP/2.0 Expires: 3600 
+20150109195431 Received from 127.0.0.1:2345: SIP/2.0 200 OK  
+20150109195441 Sent to 127.0.0.1:2345: Invite sip:juan@latuya.com SIP/2.0 Content-Type: application/sdp  v=o o=pedro@micasa.es 127.0.0.1 s=sesionchachi t=0 m=audio 23000 RTP 
+20150109195441 Received from 127.0.0.1:2345: SIP/2.0 100 Trying  SIP/2.0 180 Ringing  SIP/2.0 200 OK Content-Type: application/sdp  v=o o=juan@latuya.com 127.0.0.1 s=sesionchachi t=0 m=audio 2222 RTP  
+20150109195441 Sent to 127.0.0.1:2345: Ack sip:juan@latuya.com SIP/2.0 
+20150109195620 Sent to 127.0.0.1:2345: Invite sip:juan@latuya.com SIP/2.0 Content-Type: application/sdp  v=o o=pedro@micasa.es 127.0.0.1 s=sesionchachi t=0 m=audio 23000 RTP 
+20150109195620 Received from 127.0.0.1:2345: SIP/2.0 100 Trying  SIP/2.0 180 Ringing  SIP/2.0 200 OK Content-Type: application/sdp  v=o o=juan@latuya.com 127.0.0.1 s=sesionchachi t=0 m=audio 2222 RTP  
+20150109195620 Sent to 127.0.0.1:2345: Ack sip:juan@latuya.com SIP/2.0 
+20150108171932 Starting... 
+20150109195737 Sent to 127.0.0.1:2345: Invite sip:juan@latuya.com SIP/2.0 Content-Type: application/sdp  v=o o=pedro@micasa.es 127.0.0.1 s=sesionchachi t=0 m=audio 23000 RTP 
+20150109195737 Received from 127.0.0.1:2345: 
+20150109195749 Sent to 127.0.0.1:2345: Register sip:pedro@micasa.es:1111 SIP/2.0 Expires: 3600 
+20150109195749 Received from 127.0.0.1:2345: SIP/2.0 200 OK  
+20150109195751 Sent to 127.0.0.1:2345: Invite sip:juan@latuya.com SIP/2.0 Content-Type: application/sdp  v=o o=pedro@micasa.es 127.0.0.1 s=sesionchachi t=0 m=audio 23000 RTP 
+20150109195751 Received from 127.0.0.1:2345: 
+20150109195841 Sent to 127.0.0.1:2345: Register sip:pedro@micasa.es:1111 SIP/2.0 Expires: 3600 
+20150109195841 Received from 127.0.0.1:2345: SIP/2.0 200 OK  
+20150109195842 Sent to 127.0.0.1:2345: Invite sip:juan@latuya.com SIP/2.0 Content-Type: application/sdp  v=o o=pedro@micasa.es 127.0.0.1 s=sesionchachi t=0 m=audio 23000 RTP 
+20150109195842 Received from 127.0.0.1:2345: 
+20150109195911 Sent to 127.0.0.1:2345: Invite sip:juan@latuya.com SIP/2.0 Content-Type: application/sdp  v=o o=pedro@micasa.es 127.0.0.1 s=sesionchachi t=0 m=audio 23000 RTP 
+20150109195911 Received from 127.0.0.1:2345: SIP/2.0 100 Trying  SIP/2.0 180 Ringing  SIP/2.0 200 OK Content-Type: application/sdp  v=o o=juan@latuya.com 127.0.0.1 s=sesionchachi t=0 m=audio 2222 RTP  
+20150109195911 Sent to 127.0.0.1:2345: Ack sip:juan@latuya.com SIP/2.0 
+20150109200022 Sent to 127.0.0.1:2345: Invite sip:juan@latuya.com SIP/2.0 Content-Type: application/sdp  v=o o=pedro@micasa.es 127.0.0.1 s=sesionchachi t=0 m=audio 23000 RTP 
+20150109200022 Received from 127.0.0.1:2345: 
+20150109200128 Sent to 127.0.0.1:2345: Invite sip:juan@latuya.com SIP/2.0 Content-Type: application/sdp  v=o o=pedro@micasa.es 127.0.0.1 s=sesionchachi t=0 m=audio 23000 RTP 
+20150109200128 Received from 127.0.0.1:2345: 
+20150109200224 Sent to 127.0.0.1:2345: Invite sip:juan@latuya.com SIP/2.0 Content-Type: application/sdp  v=o o=pedro@micasa.es 127.0.0.1 s=sesionchachi t=0 m=audio 23000 RTP 
+20150109200224 Received from 127.0.0.1:2345: 
+20150109200242 Sent to 127.0.0.1:2345: Invite sip:juan@latuya.com SIP/2.0 Content-Type: application/sdp  v=o o=pedro@micasa.es 127.0.0.1 s=sesionchachi t=0 m=audio 23000 RTP 
+20150109200242 Received from 127.0.0.1:2345: 
+20150109200258 Sent to 127.0.0.1:2345: Invite sip:juan@latuya.com SIP/2.0 Content-Type: application/sdp  v=o o=pedro@micasa.es 127.0.0.1 s=sesionchachi t=0 m=audio 23000 RTP 
+20150109200258 Received from 127.0.0.1:2345: SIP/2.0 100 Trying  SIP/2.0 180 Ringing  SIP/2.0 200 OK Content-Type: application/sdp  v=o o=juan@latuya.com 127.0.0.1 s=sesionchachi t=0 m=audio 2222 RTP  
+20150109200258 Sent to 127.0.0.1:2345: Ack sip:juan@latuya.com SIP/2.0 
+20150109200340 Sent to 127.0.0.1:2345: Invite sip:juan@latuya.com SIP/2.0 Content-Type: application/sdp  v=o o=pedro@micasa.es 127.0.0.1 s=sesionchachi t=0 m=audio 23000 RTP 
+20150109200340 Received from 127.0.0.1:2345: SIP/2.0 100 Trying  SIP/2.0 180 Ringing  SIP/2.0 200 OK Content-Type: application/sdp  v=o o=juan@latuya.com 127.0.0.1 s=sesionchachi t=0 m=audio 2222 RTP  
+20150109200340 Sent to 127.0.0.1:2345: Ack sip:juan@latuya.com SIP/2.0 
+20150109200508 Sent to 127.0.0.1:2345: Invite sip:juan@latuya.com SIP/2.0 Content-Type: application/sdp  v=o o=pedro@micasa.es 127.0.0.1 s=sesionchachi t=0 m=audio 23000 RTP 
+20150109200508 Received from 127.0.0.1:2345: SIP/2.0 100 Trying  SIP/2.0 180 Ringing  SIP/2.0 200 OK Content-Type: application/sdp  v=o o=juan@latuya.com 127.0.0.1 s=sesionchachi t=0 m=audio 2222 RTP  
+20150109200508 Sent to 127.0.0.1:2345: Ack sip:juan@latuya.com SIP/2.0 
+20150109200632 Sent to 127.0.0.1:2345: Invite sip:juan@latuya.com SIP/2.0 Content-Type: application/sdp  v=o o=pedro@micasa.es 127.0.0.1 s=sesionchachi t=0 m=audio 23000 RTP 
+20150109200632 Received from 127.0.0.1:2345: SIP/2.0 100 Trying  SIP/2.0 180 Ringing  SIP/2.0 200 OK Content-Type: application/sdp  v=o o=juan@latuya.com 127.0.0.1 s=sesionchachi t=0 m=audio 2222 RTP  
+20150109200632 Sent to 127.0.0.1:2345: Ack sip:juan@latuya.com SIP/2.0 
+20150109200701 Sent to 127.0.0.1:2345: Invite sip:juan@latuya.com SIP/2.0 Content-Type: application/sdp  v=o o=pedro@micasa.es 127.0.0.1 s=sesionchachi t=0 m=audio 23000 RTP 
+20150109200701 Received from 127.0.0.1:2345: SIP/2.0 100 Trying  SIP/2.0 180 Ringing  SIP/2.0 200 OK Content-Type: application/sdp  v=o o=juan@latuya.com 127.0.0.1 s=sesionchachi t=0 m=audio 2222 RTP  
+20150109200701 Sent to 127.0.0.1:2345: Ack sip:juan@latuya.com SIP/2.0 
+20150109200742 Sent to 127.0.0.1:2345: Invite sip:juan@latuya.com SIP/2.0 Content-Type: application/sdp  v=o o=pedro@micasa.es 127.0.0.1 s=sesionchachi t=0 m=audio 23000 RTP 
+20150109200742 Received from 127.0.0.1:2345: SIP/2.0 100 Trying  SIP/2.0 180 Ringing  SIP/2.0 200 OK Content-Type: application/sdp  v=o o=juan@latuya.com 127.0.0.1 s=sesionchachi t=0 m=audio 2222 RTP  
+20150109200742 Sent to 127.0.0.1:2345: Ack sip:juan@latuya.com SIP/2.0 
+20150109200807 Sent to 127.0.0.1:2345: Invite sip:juan@latuya.com SIP/2.0 Content-Type: application/sdp  v=o o=pedro@micasa.es 127.0.0.1 s=sesionchachi t=0 m=audio 23000 RTP 
+20150109200807 Received from 127.0.0.1:2345: SIP/2.0 100 Trying  SIP/2.0 180 Ringing  SIP/2.0 200 OK Content-Type: application/sdp  v=o o=juan@latuya.com 127.0.0.1 s=sesionchachi t=0 m=audio 2222 RTP  
+20150109200807 Sent to 127.0.0.1:2345: Ack sip:juan@latuya.com SIP/2.0 
+20150109200904 Sent to 127.0.0.1:2345: Invite sip:juan@latuya.com SIP/2.0 Content-Type: application/sdp  v=o o=pedro@micasa.es 127.0.0.1 s=sesionchachi t=0 m=audio 23000 RTP 
+20150109200904 Received from 127.0.0.1:2345: SIP/2.0 100 Trying  SIP/2.0 180 Ringing  SIP/2.0 200 OK Content-Type: application/sdp  v=o o=juan@latuya.com 127.0.0.1 s=sesionchachi t=0 m=audio 2222 RTP  
+20150109200904 Sent to 127.0.0.1:2345: Ack sip:juan@latuya.com SIP/2.0 
+20150109195732 Starting... 
+20150109201318 Sent to 127.0.0.1:2345: Register sip:pedro@micasa.es:1111 SIP/2.0 Expires: 3600 
+20150109201318 Received from 127.0.0.1:2345: SIP/2.0 200 OK  
+20150109201335 Sent to 127.0.0.1:2345: Invite sip:juan@latuya.com SIP/2.0 Content-Type: application/sdp  v=o o=pedro@micasa.es 127.0.0.1 s=sesionchachi t=0 m=audio 23000 RTP 
+20150109201335 Received from 127.0.0.1:2345: SIP/2.0 100 Trying  SIP/2.0 180 Ringing  SIP/2.0 200 OK Content-Type: application/sdp  v=o o=juan@latuya.com 127.0.0.1 s=sesionchachi t=0 m=audio 24000 RTP  
+20150109201335 Sent to 127.0.0.1:2345: Ack sip:juan@latuya.com SIP/2.0 
+20150109201309 Starting... 
+20150109201439 Sent to 127.0.0.1:2345: Register sip:pedro@micasa.es:1111 SIP/2.0 Expires: 3600 
+20150109201439 Received from 127.0.0.1:2345: SIP/2.0 200 OK  
+20150109201447 Sent to 127.0.0.1:2345: Invite sip:juan@latuya.com SIP/2.0 Content-Type: application/sdp  v=o o=pedro@micasa.es 127.0.0.1 s=sesionchachi t=0 m=audio 23000 RTP 
+20150109201447 Received from 127.0.0.1:2345: SIP/2.0 100 Trying  SIP/2.0 180 Ringing  SIP/2.0 200 OK Content-Type: application/sdp  v=o o=juan@latuya.com 127.0.0.1 s=sesionchachi t=0 m=audio 24000 RTP  
+20150109201447 Sent to 127.0.0.1:2345: Ack sip:juan@latuya.com SIP/2.0 
+20150109201539 Sent to 127.0.0.1:2345: Bye sip:juan@latuya.com SIP/2.0 
+20150109201539 Received from 127.0.0.1:2345: SIP/2.0 200 OK Content-Type: application/sdp  v=o o=juan@latuya.com 127.0.0.1 s=sesionchachi t=0 m=audio 24000 RTP  
+20150109201539 Finishing.
