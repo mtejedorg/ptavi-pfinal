@@ -6,6 +6,7 @@ en UDP simple
 """
 
 import SocketServer
+import socket
 import sys
 import time
 from uaclient import log
@@ -58,6 +59,9 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         register2file: crea un archivo con los clientes
         register: se encarga de procesar los mensajes register
     """
+    my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
     def register2file(self):
         """
         Imprime la lista de clientes en el archivo 'registered.txt',
@@ -71,14 +75,63 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         info = "User \t IP \t Expires\r\n"
         for client in clients:
             info += client + " \t "
-            info += clients[client]["IP"] + " \t "
+            info += clients[client]["IP"]
+            info += ":" + clients[client]["port"] + " \t "
             tiempo = clients[client]["time"]
             info += str(tiempo) + " \t "
             info += "\r\n"
         fich.write(info)
         fich.close()
 
-    def register(self, line):
+    def find(self, name):
+        """
+        Encuentra al cliente en cuestión. Si está en la lista, devuelve
+        IP y puerto, en caso contrario devuelve ""
+        """
+        ep = ""
+        for client in clients:
+            if client == name:
+                clip = clients[client]["IP"]
+                clport = clients[client]["port"]
+                ep = clip + ":" + clport
+                break
+        return ep
+
+    def checkrequest(self, palabras):
+        """ 
+        Comprueba si son correctos los mensajes del tipo:
+            Método sip:nombre@dirección SIP/versión
+        """
+        val = True
+        val = val and palabras[1].split(":")[0] == "sip"
+        val = val and palabras[1].split("@")[0] != ""
+        val = val and palabras[1].split("@")[1] != ""
+        val = val and palabras[2].split("/")[0] == "SIP"
+        val = val and float(palabras[2].split("/")[1]) <= 2.0
+        return val
+
+    def checkanswer(self, palabras):
+        """ 
+        Comprueba si son correctos los mensajes del tipo:
+            SIP/versión código Método
+        """
+        val = True
+        val = val and palabras[0].split("/")[0] == "SIP"
+        val = val and float(palabras[0].split("/")[1]) <= 2.0
+        metodo = palabras[2]
+        try:
+            code = int(palabras[1])
+            val = val and (code == 100 and metodo == "Trying")
+            val = val and (code == 180 and metodo == "Ringing")
+            val = val and (code == 200 and metodo == "OK")
+            val = val and (code == 400 and metodo == "Bad Request")
+            val = val and (code == 404 and metodo == "User Not Found")
+            val = val and (code == 405 and metodo == "Method Not Allowed")
+        except ValueError:
+            val = False
+        return val
+
+    def manage(self, line):
         """
         Si es un mensaje register, agrega al cliente en cuestión
         a la variable global 'clients', informando por pantalla
@@ -90,34 +143,78 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
                 IP, un string con la IP del cliente
                 time: segundo desde el 1 de enero de 1979 en el
                 cual expirará
+        Si no es un mensaje register, reenviará el mensaje a quien esté dirigido,
+        siguiendo el protocolo adecuado.
         """
         lineas = line.split("\r\n")
         palabras = lineas[0].split(" ") + lineas[1].split(" ")
-        if palabras[0] == "Register":
-            cliente = palabras[1][4:]
-            #prot_ver es una lista que incluye portocolo y versión
-            prot_ver = palabras[2].split("/")
-            Data = prot_ver[0] + "/" + prot_ver[1] + " 200 OK\r\n\r\n"
-            expires = int(palabras[4])
+        if self.checkrequest(palabras):
+            if palabras[0] == "Register":
+                cliente = palabras[1].split(":")[1]
+                #prot_ver es una lista que incluye portocolo y versión
+                prot_ver = palabras[2].split("/")
+                Data = prot_ver[0] + "/" + prot_ver[1] + " 200 OK\r\n\r\n"
+                expires = int(palabras[4])
 
-            print "Registrando cliente nuevo..."
-            time_act = time.time() + expires
-            valor = {"IP": self.client_address[0], "time": time_act}
-            clients[cliente] = valor
-            print "...cliente agregado: ",
-            print cliente + ": ",
-            print valor
+                print "Registrando cliente nuevo..."
+                time_act = time.time() + expires
+                clip = self.client_address[0]
+                clport = palabras[1].split(":")[2]
 
-            logmsg = "Registered client " + cliente
-            logmsg += valor['IP'] + ":" + str(self.client_address[1])
-            log(logmsg, fich)
+                valor = {"IP": clip, "port": clport, "time": time_act}
+                clients[cliente] = valor
+                print "...cliente agregado: ",
+                print cliente + ": ",
+                print valor
 
-            if expires == 0:
-                print "El tiempo de expiración es 0.",
-                del clients[cliente]
-                print "El cliente '" + cliente + "' ha sido borrado"
+                logmsg = "Registered client " + cliente
+                logmsg += valor['IP'] + ":" + str(self.client_address[1])
+                log(logmsg, fich)
 
-            self.wfile.write(Data)
+                if expires == 0:
+                    print "El tiempo de expiración es 0.",
+                    del clients[cliente]
+                    print "El cliente '" + cliente + "' ha sido borrado"
+                logmsg = "Sent to " + clip + ":" + clport + ": " + Data
+                log (logmsg, fich)
+                self.wfile.write(Data)
+
+            elif palabras[0] == "Invite" or palabras[0] == "Ack" or palabras[0] == "Bye":
+                name = palabras[1].split(":")[1]
+                ep = self.find(name)
+                print "Encontrado " + ep
+                if ep != "":  # Si no tenemos al cliente registrado
+                    clip = ep.split(":")[0]
+                    clport = ep.split(":")[1]
+                    self.my_socket.connect((clip, int(clport)))
+                    print "El mensaje es: " + line
+                    self.my_socket.send(line)
+                    answer = self.my_socket.recv(1024)
+                    print 'Recibido -- ', answer
+                    logmsg = "Received from " + clip + ":" + str(clport) + ": " + answer
+                    log(logmsg, fich)
+                    self.wfile.write(answer)
+
+                    clip = self.client_address[0]
+                    clport = self.client_address[1]
+                    logmsg = "Sent to " + clip + ":" + str(clport) + ": " + answer
+                    log(logmsg, fich)
+                else:
+                    prot_ver = palabras[2].split("/")
+                    Data = prot_ver[0] + "/" + prot_ver[1]
+                    Data += " 404 User Not Found\r\n\r\n"
+                    self.wfile.write(Data)
+            else:
+                prot_ver = palabras[2].split("/")
+                Data = prot_ver[0] + "/" + prot_ver[1]
+                Data += " 405 Method Not Allowed\r\n\r\n"
+                self.wfile.write(Data)
+        else:
+                cliente = palabras[1].split(":")[1]
+                #prot_ver es una lista que incluye portocolo y versión
+                prot_ver = palabras[2].split("/")
+                Data = prot_ver[0] + "/" + prot_ver[1] + " 400 Bad Request\r\n\r\n"
+                self.wfile.write(Data)
 
     def update(self):
         """ Actualiza la lista de clientes a la hora actual"""
@@ -144,9 +241,12 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
             if not line:
                 break
 
+            logmsg = "Received from " + self.client_address[0] + ":"
+            logmsg += str(self.client_address[1]) + ": " + line
+            log(logmsg, fich)
             print line
 
-            self.register(line)
+            self.manage(line)
             self.update()
             self.register2file()
 
@@ -190,5 +290,6 @@ if __name__ == "__main__":
         s.serve_forever()
     except KeyboardInterrupt:
         print "\r\nByeeee!!!!"
+        #my_socket.close()
         fich.close()
         sys.exit()
