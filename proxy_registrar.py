@@ -15,6 +15,7 @@ from xml.sax.handler import ContentHandler
 
 clients = {}
 
+
 class ConfigXMLHandler(ContentHandler):
 
     def __init__(self):
@@ -111,7 +112,7 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         return val
 
     def checkanswer(self, palabras):
-        """ 
+        """
         Comprueba si son correctos los mensajes del tipo:
             SIP/versión código Método
         """
@@ -233,7 +234,7 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         for client in lista_tmp:
             print "\r\n>> Lista de clientes actualizada:",
             del clients[client]
-            print "El cliente '" + client 
+            print "El cliente '" + client
             print += "' ha sido borrado (su sesión ha expirado)"
 
     def handle(self):

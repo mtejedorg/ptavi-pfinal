@@ -75,7 +75,7 @@ def get_fecha():
 
 
 def log(msg, fich):
-    msg = " ".join(msg.split("\r\n"))  #Sustituimos los saltos de linea
+    msg = " ".join(msg.split("\r\n"))  # Sustituimos los saltos de linea
     msg = get_fecha() + " " + msg + "\r\n"
     fich.write(msg)
 
@@ -165,7 +165,6 @@ if __name__ == "__main__":
         fich.close
         print "\r\nByee!!!"
 
-
     # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
     fich = open(LOGPATH, "a")  # Añadimos al archivo de log del server
     my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -222,7 +221,7 @@ if __name__ == "__main__":
                         rtpclient["IP"] = line.split(" ")[1]
                     if line.split("=")[0] == "m":
                         rtpclient["port"] = line.split(" ")[1]
-                comando = "./mp32rtp -i " + rtpclient["IP"] 
+                comando = "./mp32rtp -i " + rtpclient["IP"]
                 comando += " -p " + str(rtpclient["port"])
                 comando += " < " + AUDIO
                 print "Enviando archivo...\r\n\r\n"
