@@ -73,8 +73,9 @@ def get_fecha():
     fecha = time.strftime('%Y%m%d%H%M%S', time.gmtime(time.time()))
     return fecha
 
+
 def log(msg, fich):
-    msg = " ".join(msg.split("\r\n")) #Sustituimos los saltos de linea
+    msg = " ".join(msg.split("\r\n"))  #Sustituimos los saltos de linea
     msg = get_fecha() + " " + msg + "\r\n"
     fich.write(msg)
 
@@ -127,7 +128,6 @@ if __name__ == "__main__":
         msg = metodo + " sip:" + add + " SIP/2.0\r\n"
         return msg
 
-
     def send(metodo):
         """ Envía al servidor un mensaje usando el método como parámetro """
         if metodo == "Register":
@@ -135,14 +135,14 @@ if __name__ == "__main__":
             msg = mensaje(metodo, add)
             msg += "Expires: " + OPTION + "\r\n"
         else:
-            msg = mensaje(metodo, OPTION)    
+            msg = mensaje(metodo, OPTION)
             if metodo == "Invite":
                 msg += "Content-Type: application/sdp\r\n\r\n"
-                msg += "v=o\r\n"                                  #v
-                msg += "o=" + NAME + " " + SERVER_IP + "\r\n"     #o
-                msg += "s=sesionchachi\r\n"                       #s
-                msg += "t=0\r\n"                                  #t
-                msg += "m=audio " + str(RTP_PORT) + " RTP\r\n"    #m
+                msg += "v=o\r\n"                                  # v
+                msg += "o=" + NAME + " " + SERVER_IP + "\r\n"     # o
+                msg += "s=sesionchachi\r\n"                       # s
+                msg += "t=0\r\n"                                  # t
+                msg += "m=audio " + str(RTP_PORT) + " RTP\r\n"    # m
 
         print "Enviando: " + msg
         my_socket.send(msg + '\r\n')
@@ -150,7 +150,6 @@ if __name__ == "__main__":
         # Registramos en el log:
         logmsg = "Sent to " + PR_IP + ":" + str(PR_PORT) + ": " + msg
         log(logmsg, fich)
-
 
     def rcv():
         """ Recibe la respuesta """
@@ -168,7 +167,7 @@ if __name__ == "__main__":
 
 
     # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
-    fich = open(LOGPATH, "a") # Añadimos al archivo de log del server
+    fich = open(LOGPATH, "a")  # Añadimos al archivo de log del server
     my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
@@ -176,7 +175,8 @@ if __name__ == "__main__":
     try:
         my_socket.connect((PR_IP, PR_PORT))
     except socket.gaierror:  # Cuando la IP es inválida
-        error = "Error: No server listening at" + PR_IP + " port " +  str(PR_PORT)
+        error = "Error: No server listening at" + PR_IP
+        error += " port " + str(PR_PORT)
         log(error, fich)
         print error
         print USAGE
@@ -192,12 +192,12 @@ if __name__ == "__main__":
 
     send(METHOD)  # Enviamos según el metodo con el que nos llaman
 
-
     # Esperamos la respuesta del servidor
     try:
         data = rcv()
     except socket.error:  # Cuando el servidor no existe
-        error = "Error: No server listening at " + PR_IP + " port " + str(PR_PORT)
+        error = "Error: No server listening at " + PR_IP
+        error += " port " + str(PR_PORT)
         log(error, fich)
         print error
         end()
@@ -222,7 +222,8 @@ if __name__ == "__main__":
                         rtpclient["IP"] = line.split(" ")[1]
                     if line.split("=")[0] == "m":
                         rtpclient["port"] = line.split(" ")[1]
-                comando = "./mp32rtp -i " + rtpclient["IP"] + " -p " + str(rtpclient["port"])
+                comando = "./mp32rtp -i " + rtpclient["IP"] 
+                comando += " -p " + str(rtpclient["port"])
                 comando += " < " + AUDIO
                 print "Enviando archivo...\r\n\r\n"
                 os.system(comando)

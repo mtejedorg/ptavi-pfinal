@@ -98,7 +98,7 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         return ep
 
     def checkrequest(self, palabras):
-        """ 
+        """
         Comprueba si son correctos los mensajes del tipo:
             Método sip:nombre@dirección SIP/versión
         """
@@ -143,7 +143,8 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
                 IP, un string con la IP del cliente
                 time: segundo desde el 1 de enero de 1979 en el
                 cual expirará
-        Si no es un mensaje register, reenviará el mensaje a quien esté dirigido,
+        Si no es un mensaje register,
+        reenviará el mensaje a quien esté dirigido,
         siguiendo el protocolo adecuado.
         """
         lineas = line.split("\r\n")
@@ -176,10 +177,14 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
                     del clients[cliente]
                     print "El cliente '" + cliente + "' ha sido borrado"
                 logmsg = "Sent to " + clip + ":" + clport + ": " + Data
-                log (logmsg, fich)
+                log(logmsg, fich)
                 self.wfile.write(Data)
 
-            elif palabras[0] == "Invite" or palabras[0] == "Ack" or palabras[0] == "Bye":
+                condition = palabras[0] == "Invite"
+                condition = condition or palabras[0] == "Ack"
+                condition = condition or palabras[0] == "Bye"
+
+            elif condition:
                 name = palabras[1].split(":")[1]
                 ep = self.find(name)
                 print "Encontrado " + ep
@@ -191,13 +196,15 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
                     self.my_socket.send(line)
                     answer = self.my_socket.recv(1024)
                     print 'Recibido -- ', answer
-                    logmsg = "Received from " + clip + ":" + str(clport) + ": " + answer
+                    logmsg = "Received from " + clip + ":"
+                    logmsg += str(clport) + ": " + answer
                     log(logmsg, fich)
                     self.wfile.write(answer)
 
                     clip = self.client_address[0]
                     clport = self.client_address[1]
-                    logmsg = "Sent to " + clip + ":" + str(clport) + ": " + answer
+                    logmsg = "Sent to " + clip + ":"
+                    logmsg += str(clport) + ": " + answer
                     log(logmsg, fich)
                 else:
                     prot_ver = palabras[2].split("/")
@@ -213,7 +220,8 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
                 cliente = palabras[1].split(":")[1]
                 #prot_ver es una lista que incluye portocolo y versión
                 prot_ver = palabras[2].split("/")
-                Data = prot_ver[0] + "/" + prot_ver[1] + " 400 Bad Request\r\n\r\n"
+                Data = prot_ver[0] + "/" + prot_ver[1]
+                Data += " 400 Bad Request\r\n\r\n"
                 self.wfile.write(Data)
 
     def update(self):
@@ -225,7 +233,8 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         for client in lista_tmp:
             print "\r\n>> Lista de clientes actualizada:",
             del clients[client]
-            print "El cliente '" + client + "' ha sido borrado (su sesión ha expirado)"
+            print "El cliente '" + client 
+            print += "' ha sido borrado (su sesión ha expirado)"
 
     def handle(self):
         """

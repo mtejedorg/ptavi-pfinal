@@ -15,6 +15,7 @@ import uaclient
 from xml.sax import make_parser
 from xml.sax.handler import ContentHandler
 
+
 class SIPHandler(SocketServer.DatagramRequestHandler):
     """
     SIP server class
@@ -65,14 +66,16 @@ class SIPHandler(SocketServer.DatagramRequestHandler):
         prot = data.split()[2]
         if metodo == "Invite":
             self.send("100")  # Send interpreta el Trying y añade Ringing y OK
-            #Enviamos el archivo por RTP
+            # Almacenamos los datos de envío RTP
             for line in lines:
                 if line.split("=")[0] == "o":
                     rtpclient["IP"] = line.split(" ")[1]
                 if line.split("=")[0] == "m":
                     rtpclient["port"] = line.split(" ")[1]
         elif metodo == "Ack":
-            comando = "./mp32rtp -i " + rtpclient["IP"] + " -p " + str(rtpclient["port"])
+            # Enviamos el audio por RTP
+            comando = "./mp32rtp -i " + rtpclient["IP"]
+            comando += " -p " + str(rtpclient["port"])
             comando += " < " + FILE
             print "Enviando archivo...\r\n\r\n"
             os.system(comando)
@@ -86,6 +89,7 @@ class SIPHandler(SocketServer.DatagramRequestHandler):
 if __name__ == "__main__":
 
     USAGE = "Usage: python uaserver.py config"
+    # Implementado para un único cliente simultáneo
     rtpclient = {}
 
     # Creamos servidor de eco y escuchamos
@@ -116,7 +120,7 @@ if __name__ == "__main__":
 
     s = SocketServer.UDPServer((IP, PORT), SIPHandler)
 
-    fich = open(LOGPATH, "a") # Abrimos el archivo de log
+    fich = open(LOGPATH, "a")  # Abrimos el archivo de log
     uaclient.log("Starting...\r\n", fich)
     print "Listening...\r\n"
     try:
