@@ -79,6 +79,7 @@ class SIPHandler(SocketServer.DatagramRequestHandler):
             comando += " < " + FILE
             print "Enviando archivo...\r\n\r\n"
             os.system(comando)
+            print "Archivo enviado"
         elif metodo == "Bye":
             self.send("200")
         elif prot != "SIP/2.0":

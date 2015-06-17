@@ -150,6 +150,11 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         """
         lineas = line.split("\r\n")
         palabras = lineas[0].split(" ") + lineas[1].split(" ")
+
+        condition = palabras[0] == "Invite"
+        condition = condition or palabras[0] == "Ack"
+        condition = condition or palabras[0] == "Bye"
+
         if self.checkrequest(palabras):
             if palabras[0] == "Register":
                 cliente = palabras[1].split(":")[1]
@@ -180,10 +185,6 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
                 logmsg = "Sent to " + clip + ":" + clport + ": " + Data
                 log(logmsg, fich)
                 self.wfile.write(Data)
-
-                condition = palabras[0] == "Invite"
-                condition = condition or palabras[0] == "Ack"
-                condition = condition or palabras[0] == "Bye"
 
             elif condition:
                 name = palabras[1].split(":")[1]
@@ -234,8 +235,8 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         for client in lista_tmp:
             print "\r\n>> Lista de clientes actualizada:",
             del clients[client]
-            print "El cliente '" + client
-            print += "' ha sido borrado (su sesión ha expirado)"
+            print "El cliente '" + client,
+            print "' ha sido borrado (su sesión ha expirado)"
 
     def handle(self):
         """
