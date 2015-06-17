@@ -151,12 +151,12 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         lineas = line.split("\r\n")
         palabras = lineas[0].split(" ") + lineas[1].split(" ")
 
-        condition = palabras[0] == "Invite"
-        condition = condition or palabras[0] == "Ack"
-        condition = condition or palabras[0] == "Bye"
+        condition = palabras[0] == "INVITE"
+        condition = condition or palabras[0] == "ACK"
+        condition = condition or palabras[0] == "BYE"
 
         if self.checkrequest(palabras):
-            if palabras[0] == "Register":
+            if palabras[0] == "REGISTER":
                 cliente = palabras[1].split(":")[1]
                 #prot_ver es una lista que incluye portocolo y versión
                 prot_ver = palabras[2].split("/")

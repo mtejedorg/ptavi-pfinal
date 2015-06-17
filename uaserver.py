@@ -64,7 +64,7 @@ class SIPHandler(SocketServer.DatagramRequestHandler):
         print "El cliente nos manda ==> " + data
         metodo = data.split()[0]
         prot = data.split()[2]
-        if metodo == "Invite":
+        if metodo == "INVITE":
             self.send("100")  # Send interpreta el Trying y añade Ringing y OK
             # Almacenamos los datos de envío RTP
             for line in lines:
@@ -72,7 +72,7 @@ class SIPHandler(SocketServer.DatagramRequestHandler):
                     rtpclient["IP"] = line.split(" ")[1]
                 if line.split("=")[0] == "m":
                     rtpclient["port"] = line.split(" ")[1]
-        elif metodo == "Ack":
+        elif metodo == "ACK":
             # Enviamos el audio por RTP
             comando = "./mp32rtp -i " + rtpclient["IP"]
             comando += " -p " + str(rtpclient["port"])
@@ -80,7 +80,7 @@ class SIPHandler(SocketServer.DatagramRequestHandler):
             print "Enviando archivo...\r\n\r\n"
             os.system(comando)
             print "Archivo enviado"
-        elif metodo == "Bye":
+        elif metodo == "BYE":
             self.send("200")
         elif prot != "SIP/2.0":
             self.send("400")

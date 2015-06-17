@@ -125,7 +125,7 @@ if __name__ == "__main__":
 
     def mensaje(metodo, add):
         """ Devuelve un string con la forma del mensaje a enviar """
-        msg = metodo + " sip:" + add + " SIP/2.0\r\n"
+        msg = metodo.upper() + " sip:" + add + " SIP/2.0\r\n"
         return msg
 
     def send(metodo):
@@ -234,6 +234,11 @@ if __name__ == "__main__":
 
     elif code == "400":          # Bad Request
         print "El servidor no entiende el método " + METHOD
+    elif code == "404":          # Not Found
+        notfound =  "404 User not Found: "
+        notfound += "el cliente no se ha registrado en el proxy "
+        notfound += "o su sesión ha expirado"
+        print notfound
     elif code == "405":          # Method Not Allowed
         print "Error en el servidor: Método no contemplado"
     elif code == "200":          # OK
