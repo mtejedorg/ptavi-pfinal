@@ -14,7 +14,7 @@
 <config>
     <!---server name= "ProxyRegistrar"-->
     <!---server ip= "127.0.0.1"-->
-    <server puerto= "2345">
+    <server puerto= "4587">
     </server>
     <database path= "registered.txt">
     <!--database passwdpath= "passwd.txt"-->

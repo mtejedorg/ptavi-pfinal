@@ -18,13 +18,13 @@
 <!ATTLIST audio path CDATA #REQUIRED>
 ]>
 <config>
-    <account username= "pedro@micasa.es">
+    <account username= "katarina@noxus.es">
     <!---account passwd= "pass"-->
     </account>
     <!---uaserver ip= "pass"-->
-    <uaserver puerto= "1111" />
+    <uaserver puerto= "1234" />
     <rtpaudio puerto= "23000" />
-    <regproxy ip= "127.0.0.1" puerto= "2345" />
+    <regproxy ip= "127.0.0.1" puerto= "4587" />
     <log path="log.txt" />
     <audio path= "cancion.mp3" />
 </config>
