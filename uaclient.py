@@ -235,7 +235,7 @@ if __name__ == "__main__":
     elif code == "400":          # Bad Request
         print "El servidor no entiende el método " + METHOD
     elif code == "404":          # Not Found
-        notfound =  "404 User not Found: "
+        notfound = "404 User not Found: "
         notfound += "el cliente no se ha registrado en el proxy "
         notfound += "o su sesión ha expirado"
         print notfound
