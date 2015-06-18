@@ -302,6 +302,7 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
 
 USAGE = "Usage: python proxy_registrar.py config"
 
+
 def recuperarclientes():
     """
     Abre el archivo 'registered.txt' en busca de clientes
