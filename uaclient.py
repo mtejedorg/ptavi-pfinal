@@ -102,7 +102,12 @@ if __name__ == "__main__":
     parser = make_parser()
     xmlHandler = ConfigXMLHandler()
     parser.setContentHandler(xmlHandler)
-    parser.parse(open(CONFIGFILE))
+    try:
+        parser.parse(open(CONFIGFILE))
+    except IOError:
+        print "No se encuentra el archivo: " + CONFIGFILE
+        sys.exit()
+
     config = xmlHandler.get_config()
 
     NAME = config["account"]["username"]
@@ -166,7 +171,12 @@ if __name__ == "__main__":
         print "\r\nByee!!!"
 
     # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
-    fich = open(LOGPATH, "a")  # Añadimos al archivo de log del server
+    try:
+        fich = open(LOGPATH, "a")  # Abrimos el archivo de log
+    except IOError:
+        print "No se encuentra el archivo: " + LOGPATH
+        sys.exit()
+
     my_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 

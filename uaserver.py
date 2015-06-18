@@ -103,7 +103,13 @@ if __name__ == "__main__":
     xmlHandler = uaclient.ConfigXMLHandler()
     parser = make_parser()
     parser.setContentHandler(xmlHandler)
-    parser.parse(open(CONFIGFILE))
+
+    try:
+        parser.parse(open(CONFIGFILE))
+    except IOError:
+        print "No se encuentra el archivo: " + CONFIGFILE
+        sys.exit()
+
     config = xmlHandler.get_config()
 
     # Extraemos la información de nuestro diccionario
@@ -121,7 +127,12 @@ if __name__ == "__main__":
 
     s = SocketServer.UDPServer((IP, PORT), SIPHandler)
 
-    fich = open(LOGPATH, "a")  # Abrimos el archivo de log
+    try:
+        fich = open(LOGPATH, "a")  # Abrimos el archivo de log
+    except IOError:
+        print "No se encuentra el archivo: " + LOGPATH
+        sys.exit()
+
     uaclient.log("Starting...\r\n", fich)
     print "Listening...\r\n"
     try:
