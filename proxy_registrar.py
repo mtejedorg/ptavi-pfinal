@@ -70,18 +70,18 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         Imprime la lista de clientes en el archivo 'registered.txt',
         con el formato:
 
-        User \t IP \t Expires
-        luke@polismassa.com \t localhost \t 2013-10-23 10:37:12
-        papa@darthwader.com \t localhost \t 2013-10-23 10:21:15
+        User \t IP \t Port \t Expires(s) \t Timeremaining(s)
         """
         fich = open(DATABASE, 'w')
-        info = "User \t IP \t Expires\r\n"
+        info = "User \t IP \t Port \t Expires \t Remaining\r\n"
         for client in clients:
             info += client + " \t "
-            info += clients[client]["IP"]
-            info += ":" + clients[client]["port"] + " \t "
+            info += clients[client]["IP"] + " \t "
+            info += clients[client]["port"] + " \t "
             tiempo = clients[client]["time"]
             info += str(tiempo) + " \t "
+            remaining = tiempo - time.time()
+            info += str(remaining)
             info += "\r\n"
         fich.write(info)
         fich.close()
@@ -302,6 +302,26 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
 
 USAGE = "Usage: python proxy_registrar.py config"
 
+def recuperarclientes():
+    """
+    Abre el archivo 'registered.txt' en busca de clientes
+    """
+    fich = open(DATABASE, 'r')
+    for linea in fich:
+        head = "User \t IP \t Port \t Expires \t Remaining\r\n"
+        condition = linea != head
+        condition = condition and linea != ""
+        if condition:
+            info = linea.split(" \t ")
+            user = info[0]
+            clip = info[1]
+            clport = info[2]
+            time = float(info[3])
+            valor = {"IP": clip, "port": clport, "time": time}
+            clients[user] = valor
+    fich.close()
+
+
 if __name__ == "__main__":
 
     if len(sys.argv) != 2:
@@ -333,6 +353,12 @@ if __name__ == "__main__":
     # Creamos servidor de register y proxy y escuchamos
     log("Starting...", fich)
     s = SocketServer.UDPServer((IP, PORT), SIPRegisterHandler)
+    print "Recuperando clientes..."
+    try:
+        recuperarclientes()
+    except IOError:
+        print "No se ha recuperado ningún cliente"
+
     print "Lanzando servidor UDP de SIP Register...\r\n\r\n"
     try:
         s.serve_forever()
