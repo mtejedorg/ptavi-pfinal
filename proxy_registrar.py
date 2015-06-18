@@ -121,7 +121,7 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
 
         Length nos da la longitud del string aleatorio
         """
-        available = upp * string.ascii_uppercase 
+        available = upp * string.ascii_uppercase
         available += low * string.ascii_lowercase
         available += dig * string.digits
         rs = ""
@@ -136,14 +136,14 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         head = "Via: SIP/2.0/UDP "
         head += str(IP) + ":" + str(PORT)
         branch = ";branch="
-        branch += self.randomstring(1,1,1,9)
+        branch += self.randomstring(1, 1, 1, 9)
         head += branch + "\r\n"
 
         req = msg.split("\r\n")[0] + "\r\n"
         reqlen = len(req)
         add = msg[reqlen:]
         res = req + head + add
-        
+
         return res
 
     def checkanswer(self, palabras):

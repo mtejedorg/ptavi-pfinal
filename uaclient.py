@@ -157,7 +157,7 @@ if __name__ == "__main__":
         log(logmsg, fich)
 
     def rcv():
-        """ 
+        """
         Recibe la respuesta
         Elimina cabecera proxy, si la hay
         """
