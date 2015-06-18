@@ -100,6 +100,15 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
                 break
         return ep
 
+    def checksdp(self, sdp):
+        val = True
+        for linea in sdp:
+            if linea[:2] == "v=" or linea[:2] == "t=":
+                try:
+                    int(linea[2:3])
+                except ValueError:
+                    val = False
+
     def checkrequest(self, palabras):
         """
         Comprueba si son correctos los mensajes del tipo:
@@ -190,7 +199,11 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         condition = condition or palabras[0] == "ACK"
         condition = condition or palabras[0] == "BYE"
 
-        if self.checkrequest(palabras):
+        rightsdp = True
+        if palabras[0] == "INVITE":
+            rightsdp = self.checksdp(lineas)
+
+        if self.checkrequest(palabras) or not rightsdp:
             if palabras[0] == "REGISTER":
                 cliente = palabras[1].split(":")[1]
                 #prot_ver es una lista que incluye protocolo y versión
@@ -303,6 +316,21 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
 USAGE = "Usage: python proxy_registrar.py config"
 
 
+def checkip(ip):
+    """
+    Comprueba que la IP esté formada por 4 valores válidos
+    La variable ip debe ser un string
+    """
+    val = True
+    campos = ip.split(".")
+    if len(campos) != 4:
+        val = False
+    for campo in campos:
+        condition = int(campo) >= 0
+        condition = condition and int(campo) < 256
+        if not condition:
+            val = False
+
 def recuperarclientes():
     """
     Abre el archivo 'registered.txt' en busca de clientes
@@ -342,9 +370,17 @@ if __name__ == "__main__":
     NAME = config["server"]["name"]
     if config["server"]["ip"] != "":
         IP = config["uaserver"]["ip"]
+        if not checkip(IP):
+            print "IP incorrecta"
+            sys.exit()
     else:
         IP = "127.0.0.1"
-    PORT = int(config["server"]["puerto"])
+
+    try:
+        PORT = int(config["server"]["puerto"])
+    except ValueError:
+        print "Puerto incorrecto"
+        sys.exit()
 
     DATABASE = config["database"]["path"]
     PASSWDDB = config["database"]["passwdpath"]
