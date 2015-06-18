@@ -157,18 +157,31 @@ if __name__ == "__main__":
         log(logmsg, fich)
 
     def rcv():
-        """ Recibe la respuesta """
+        """ 
+        Recibe la respuesta
+        Elimina cabecera proxy, si la hay
+        """
         data = my_socket.recv(1024)
-        print 'Recibido -- ', data
+        print 'Recibido:'
+        print data
         msg = "Received from " + PR_IP + ":" + str(PR_PORT) + ": " + data
         log(msg, fich)
+
+        if data.split("\r\n")[1][0:4] == "Via:":
+            split = data.split("\r\n")
+            b = ''
+            for i in split:
+                if i != split[1]:
+                    b += i + "\r\n"
+            data = b
+
         return data
 
     def end():
         # Cerramos todo
         my_socket.close()
         fich.close
-        print "\r\nByee!!!"
+        print "\r\nHasta luego!!!"
 
     # Creamos el socket, lo configuramos y lo atamos a un servidor/puerto
     try:
@@ -216,6 +229,7 @@ if __name__ == "__main__":
         sys.exit()
 
     code = data.split()[1]
+
     rtpclient = {}
 
     if code == "100":

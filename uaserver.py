@@ -60,8 +60,18 @@ class SIPHandler(SocketServer.DatagramRequestHandler):
     def handle(self):
         """ Recibe los mensajes y se encarga de responder """
         data = self.rfile.read()
-        lines = data.split("\r\n")
         print "El cliente nos manda ==> " + data
+
+        #Eliminamos cabecera proxy, si la hay
+        if data.split("\r\n")[1][0:4] == "Via:":
+            split = data.split("\r\n")
+            b = ''
+            for i in split:
+                if i != split[1]:
+                    b += i + "\r\n"
+            data = b
+
+        lines = data.split("\r\n")
         metodo = data.split()[0]
         prot = data.split()[2]
         if metodo == "INVITE":

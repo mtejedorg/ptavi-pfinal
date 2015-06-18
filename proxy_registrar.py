@@ -9,6 +9,8 @@ import SocketServer
 import socket
 import sys
 import time
+import random
+import string
 from uaclient import log
 from xml.sax import make_parser
 from xml.sax.handler import ContentHandler
@@ -111,6 +113,39 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         val = val and float(palabras[2].split("/")[1]) <= 2.0
         return val
 
+    def randomstring(self, upp, low, dig, length):
+        """
+        Uso: upp, low, dig funcionan como booleanos.
+        Se deben instanciar como True, False, 1 o 0.
+        El uso de otro entero funciona pero no es eficiente.
+
+        Length nos da la longitud del string aleatorio
+        """
+        available = upp * string.ascii_uppercase 
+        available += low * string.ascii_lowercase
+        available += dig * string.digits
+        rs = ""
+
+        if available != "":
+            for i in range(length):
+                rs += random.SystemRandom().choice(available)
+
+        return rs
+
+    def headed(self, msg):
+        head = "Via: SIP/2.0/UDP "
+        head += str(IP) + ":" + str(PORT)
+        branch = ";branch="
+        branch += self.randomstring(1,1,1,9)
+        head += branch + "\r\n"
+
+        req = msg.split("\r\n")[0] + "\r\n"
+        reqlen = len(req)
+        add = msg[reqlen:]
+        res = req + head + add
+        
+        return res
+
     def checkanswer(self, palabras):
         """
         Comprueba si son correctos los mensajes del tipo:
@@ -158,7 +193,7 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
         if self.checkrequest(palabras):
             if palabras[0] == "REGISTER":
                 cliente = palabras[1].split(":")[1]
-                #prot_ver es una lista que incluye portocolo y versión
+                #prot_ver es una lista que incluye protocolo y versión
                 prot_ver = palabras[2].split("/")
                 Data = prot_ver[0] + "/" + prot_ver[1] + " 200 OK\r\n\r\n"
                 expires = int(palabras[4])
@@ -190,17 +225,19 @@ class SIPRegisterHandler(SocketServer.DatagramRequestHandler):
                 name = palabras[1].split(":")[1]
                 ep = self.find(name)
                 print "Encontrado " + ep
-                if ep != "":  # Si no tenemos al cliente registrado
+                if ep != "":  # Si tenemos al cliente registrado
                     clip = ep.split(":")[0]
                     clport = ep.split(":")[1]
                     self.my_socket.connect((clip, int(clport)))
-                    print "El mensaje es: " + line
+                    line = self.headed(line)
+                    print "Enviamos:\r\n" + line
                     self.my_socket.send(line)
                     answer = self.my_socket.recv(1024)
-                    print 'Recibido -- ', answer
+                    print 'Recibido:\r\n', answer
                     logmsg = "Received from " + clip + ":"
                     logmsg += str(clport) + ": " + answer
                     log(logmsg, fich)
+                    answer = self.headed(answer)
                     self.wfile.write(answer)
 
                     clip = self.client_address[0]
@@ -293,7 +330,7 @@ if __name__ == "__main__":
     LOGPATH = config["log"]["path"]
     fich = open(LOGPATH, 'a')
 
-    # Creamos servidor de register y escuchamos
+    # Creamos servidor de register y proxy y escuchamos
     log("Starting...", fich)
     s = SocketServer.UDPServer((IP, PORT), SIPRegisterHandler)
     print "Lanzando servidor UDP de SIP Register...\r\n\r\n"
